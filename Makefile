@@ -1,16 +1,28 @@
-NAME =
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror
+INCLUDES = -I./42-libft
+LIBS = -lreadline -L./42-libft -lft
+SRCS = main.c parsing.c utils.c lexer.c free.c syntax_checker.c
+OBJS = $(SRCS:.c=.o)
+NAME = minishell
 
-SRC = 
+all: $(NAME)
 
-OBJ = 
+$(NAME): $(OBJS)
+	@make -C ./42-libft
+	$(CC) $(CFLAGS) $(OBJS) $(LIBS) -o $(NAME)
 
-
-all:
+%.o: %.c
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
-	rm -f *.o
+	@make clean -C ./42-libft
+	rm -f $(OBJS)
 
 fclean: clean
+	@make fclean -C ./42-libft
 	rm -f $(NAME)
 
 re: fclean all
+
+.PHONY: all clean fclean re
