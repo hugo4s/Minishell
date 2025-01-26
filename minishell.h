@@ -22,19 +22,18 @@ typedef struct s_mini
 	char	*prompt;
 	char	**envp;
 	t_token	*token;
-	char	error;
-	char	exit;
 }	t_mini;
 
-enum e_type{
-	PIPE = 10,
-	EXECVE = 11,
-	BUILDIN = 12,
-	ARG = 13,
-	ARG_FILE = 14,
-	REDIRECT = 15,
-	HEREDOC = 16
-};
+typedef enum e_cmd_type {
+    CMD_NONE = 0,
+    CMD_PIPE = 10,
+    CMD_EXEC = 11,
+    CMD_BUILDIN = 12,
+    CMD_ARG = 13,
+    CMD_ARG_FILE = 14,
+    CMD_REDIRECT = 15,
+    CMD_HEREDOC = 16
+} t_cmd_type;
 
 // open()
 // O_APPEND
@@ -83,18 +82,9 @@ enum e_type{
 
 # include "./42-libft/libft.h"
 
-char	**lexer(char *input);
-int	parser(t_token **head, char *str);
-void	exit_handler(t_mini *ms, const char *msg, const int code);
-
-char	*free_ptr(char *ptr);
-char	**free_mat(char **mat);
-t_token	*free_token(t_token *token);
-char	**ft_matdup(char **mat);
-
-int	syntax_checker(t_mini *ms);
-
-void	check_pipe(char *cmd, t_token **head);
-int	check_quotes(char c, int quotes);
+t_mini init(char **envp);
+char *get_input(t_mini *ms, char *prompt);
+t_token *lexer(char *input);
+void parser(t_mini *ms);
 
 #endif

@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 INCLUDES = -I./42-libft
 LIBS = -lreadline -L./42-libft -lft
-SRCS = main.c parsing.c utils.c lexer.c free.c syntax_checker.c
+SRCS = main.c init.c lexer.c input.c parser.c
 OBJS = $(SRCS:.c=.o)
 NAME = minishell
 

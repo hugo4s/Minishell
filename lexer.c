@@ -1,54 +1,62 @@
 #include "minishell.h"
 
-static char	*filler(char *input, int pos)
+static char **free_mat(char **mat)
 {
-	char	*ret;
-	int		i;
-	int		j;
+    int i;
 
-	ret = ft_calloc(ft_strlen(input) + 3, sizeof (char));
-	if (!ret)
-		return (NULL);
-	i = -1;
-	j = -1;
-	while (++j < pos)
-		ret[j] = input[++i];
-	i++;
-	ret[j++] = -1;
-	ret[j++] = input[i++];
-	if (input[i] == input[i - 1] && input[i] != '|')
-		ret[j++] = input[i++];
-	ret[j++] = -1;
-	while (input[i])
-		ret[j++] = input[i++];
-	ret[j] = '\0';
-	input = free_ptr(input);
-	return (ret);
+    if (!mat)
+        return NULL;
+    i = 0;
+    while (mat[i])
+    {
+        free(mat[i]);
+        i++;
+    }
+    free(mat);
+    return NULL;
 }
 
-char	**lexer(char *input)
+t_token *create_new_token(char *cmd)
 {
-	int		i;
-	int		quotes;
-	char	*temp;
-	char	**ret;
+    t_token *new_token;
 
-	i = -1;
-	quotes = 0;
-	temp = ft_strdup(input);
-	while (temp && temp[++i])
-	{
-		if ((temp[i] == '|' || temp[i] == '>' || temp[i] == '<' ) && !quotes)
-		{
-			temp = filler(temp, i);
-			i = i + 2;
-		}	
-		else if (temp[i] == '\"' || temp[i] == '\'')
-			quotes = check_quotes(temp[i], quotes);
-	}
-	if (quotes)
-		temp = free_ptr(temp);
-	ret = ft_split(temp, -1);
-	temp = free_ptr(temp);
-	return (ret);
+    if (!(new_token = malloc(sizeof(t_token))))
+        return NULL;
+    if (!(new_token->cmd = ft_strdup(cmd)))
+    {
+        free(new_token);
+        return NULL;
+    }
+    new_token->next = NULL;
+    return new_token;
+}
+
+t_token *lexer(char *input)
+{
+    t_token *head = NULL;
+    char **mat = ft_split(input, ' ');
+    int i = 0;
+
+    while (mat[i])
+    {
+        t_token *new_token = create_new_token(mat[i]);
+        if (!new_token)
+        {
+            free_mat(mat);
+            exit(1);
+        }
+
+        if (!head)
+            head = new_token;
+        else
+        {
+            t_token *temp = head;
+            while (temp->next)
+                temp = temp->next;
+            temp->next = new_token;
+        }
+        i++;
+    }
+    free_mat(mat);
+    return head;
 }
