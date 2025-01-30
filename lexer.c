@@ -34,6 +34,7 @@ t_token *create_new_token(char *cmd)
 t_token *lexer(char *input)
 {
     t_token *head = NULL;
+    t_token *tail = NULL;
     char **mat = ft_split(input, ' ');
     int i = 0;
 
@@ -47,13 +48,15 @@ t_token *lexer(char *input)
         }
 
         if (!head)
+        {
             head = new_token;
+            tail = new_token;
+        }
         else
         {
-            t_token *temp = head;
-            while (temp->next)
-                temp = temp->next;
-            temp->next = new_token;
+            tail->next = new_token;
+			new_token->prev = tail;
+            tail = new_token;
         }
         i++;
     }

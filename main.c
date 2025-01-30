@@ -15,13 +15,17 @@ int main(int argc, char *argv[], char **envp)
             ms.token = lexer(ms.input);
             if (ms.token)
             {
-                parser(&ms);
+				parser(&ms);
+				exec(&ms);
             }
         }
         for (t_token *current = ms.token; current != NULL; current = current->next)
 		{
-			printf("%s\n", current->cmd);
-            printf("%d\n", current->type);
+			if(current->type != CMD_NONE)
+			{
+				printf("%s\n", current->cmd);
+				printf("%d\n", current->type);
+			}
         }
     }
 }
