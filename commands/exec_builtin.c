@@ -21,10 +21,9 @@ static int is_builtin(const char *cmd)
 void exec_builtin(t_token *token, t_mini *mini)
 {
     if (!is_builtin(token->cmd))
-        return;
-        
+        return;        
     if (strcmp(token->cmd, "cd") == 0)
-        exec_cd(token);
+        exec_cd(token, *mini);
     else if (strcmp(token->cmd, "echo") == 0)
         exec_echo(token);
     else if (strcmp(token->cmd, "pwd") == 0)

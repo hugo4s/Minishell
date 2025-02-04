@@ -63,3 +63,4 @@ t_token *lexer(char *input)
     free_mat(mat);
     return head;
 }
+
