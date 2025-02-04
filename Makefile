@@ -15,7 +15,7 @@ SRCS = main.c init.c lexer.c input.c parser.c valid_syntax.c executable.c \
 	   ./commands/executable/exec_mv.c ./commands/executable/exec_ps.c \
 	   ./commands/executable/exec_rm.c ./commands/executable/exec_sort.c \
 	   ./commands/executable/exec_tail.c ./commands/executable/exec_touch.c \
-	   ./commands/executable/exec_wc.c handle_token.c \
+	   ./commands/executable/exec_wc.c handle_token.c
 
 OBJS = $(SRCS:.c=.o)
 NAME = minishell

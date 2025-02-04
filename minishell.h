@@ -37,6 +37,7 @@ typedef enum e_cmd_type {
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/wait.h>
+#include <string.h>
 # include <unistd.h>
 # include "./42-libft/libft.h"
 
@@ -84,5 +85,11 @@ void	exec_touch(t_token *token);
 int is_builtin_command(const char *cmd);
 int is_exec_command(const char *cmd);
 void set_command_type(t_token *current);
+
+extern volatile sig_atomic_t g_signal_received;
+
+void setup_signals(int is_child);
+void reset_signals(void);
+int handle_minishell_execution(t_mini *ms, char *path);
 
 #endif
