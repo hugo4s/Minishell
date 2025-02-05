@@ -60,7 +60,7 @@ void    exec_redirect(t_token *token);
 void    exec_heredoc(t_token *token);
 
 void     exec_echo(t_token *token);
-void     exec_cd(t_token *token, t_mini mini);
+void     exec_cd(t_token *token);
 void     exec_pwd(t_token *token);
 void     exec_export(t_token *token);
 void     exec_unset(t_token *token);
