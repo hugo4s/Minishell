@@ -8,5 +8,7 @@ t_mini init(char **envp)
     ms.envp = envp;
     ms.token = NULL;
     ms.prompt = "minishell$ ";
+	ms.exit_status = 0;
+	ms.in_quotes = 0;
     return ms;
 }

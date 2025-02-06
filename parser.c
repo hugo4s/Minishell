@@ -82,7 +82,7 @@ void parser(t_mini *ms)
     command_seen = 0;
     while (current)
     {
-        process_token(current, prev, &last_cmd, &command_seen);
+        process_token(current, prev, &last_cmd, &command_seen, ms);
         prev = current;
         current = current->next;
     }

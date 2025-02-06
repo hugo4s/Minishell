@@ -19,13 +19,5 @@ int main(int argc, char *argv[], char **envp)
 				exec(&ms);
             }
         }
-        for (t_token *current = ms.token; current != NULL; current = current->next)
-		{
-			if(current->type != CMD_NONE)
-			{
-				printf("%s\n", current->cmd);
-				printf("%d\n", current->type);
-			}
-        }
     }
 }

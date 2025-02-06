@@ -8,6 +8,8 @@ typedef struct s_token
 	char			**args_file;
 	struct s_token	*next;
 	struct s_token	*prev;
+	int quoted;
+	int quoted_type;
 }	t_token;
 
 typedef struct s_mini
@@ -16,6 +18,8 @@ typedef struct s_mini
 	char	*prompt;
 	char	**envp;
 	t_token	*token;
+	int exit_status;
+	int in_quotes;
 }	t_mini;
 
 typedef enum e_cmd_type {
@@ -26,7 +30,11 @@ typedef enum e_cmd_type {
     CMD_ARG = 13,
     CMD_ARG_FILE = 14,
     CMD_REDIRECT = 15,
-    CMD_HEREDOC = 16
+    CMD_HEREDOC = 16,
+    CMD_SINGLE_QUOTE = 17,
+    CMD_DOUBLE_QUOTE = 18,
+    CMD_EXIT_STATUS = 19,
+    CMD_SUBSHELL = 20
 } t_cmd_type;
 
 
@@ -50,7 +58,7 @@ void parser(t_mini *ms);
 void add_to_args_file(t_token *token, char *arg);
 
 void process_token(t_token *current, t_token *prev,
-    t_token **last_cmd, int *command_seen);
+    t_token **last_cmd, int *command_seen, t_mini *ms);
 void handle_syntax_error(t_mini *ms);
 void    exec(t_mini *ms);
 void    exec_pipe(t_token *token);
@@ -67,29 +75,10 @@ void     exec_unset(t_token *token);
 void     exec_env(t_token *token, t_mini *mini);
 void     exec_exit(t_token *token);
 
-void	exec_ls(t_token *token);
-void	exec_cat(t_token *token);
-void	exec_mkdir(t_token *token);
-void	exec_rm(t_token *token);
-void	exec_cp(t_token *token);
-void	exec_mv(t_token *token);
-void	exec_grep(t_token *token);
-void	exec_wc(t_token *token);
-void	exec_ps(t_token *token);
-void	exec_head(t_token *token);
-void	exec_tail(t_token *token);
-void	exec_sort(t_token *token);
-void	exec_clear(void);
-void	exec_touch(t_token *token);
-
 int is_builtin_command(const char *cmd);
 int is_exec_command(const char *cmd);
 void set_command_type(t_token *current);
-
 extern volatile sig_atomic_t g_signal_received;
 
-void setup_signals(int is_child);
-void reset_signals(void);
-int handle_minishell_execution(t_mini *ms, char *path);
 
 #endif
