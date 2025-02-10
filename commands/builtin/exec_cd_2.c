@@ -6,7 +6,7 @@
 /*   By: ruida-si <ruida-si@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 17:31:57 by ruida-si          #+#    #+#             */
-/*   Updated: 2025/02/08 19:43:09 by ruida-si         ###   ########.fr       */
+/*   Updated: 2025/02/10 15:35:43 by ruida-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,21 +31,21 @@ void	update_var(char *oldpwd, char *pwd, t_mini *mini)
 	}
 }
 
-char	*get_old_pwd(t_env *ev)
+char	*get_var_content(char *var, int i, t_env *ev)
 {
-	char	*pwd;
+	char	*content;
 
-	pwd = NULL;
+	content = NULL;
 	while (ev)
 	{
-		if (ft_strcmp(ev->var, "OLDPWD") == 0)
+		if (ft_strcmp(ev->var, var) == 0)
 		{
-			pwd = ft_strdup(ev->content + 7);
+			content = ft_strdup(ev->content + i);
 			break ;
 		}
 		ev = ev->next;
 	}
-	return (pwd);
+	return (content);
 }
 
 void	free_pwd(char *oldpwd, char *pwd)

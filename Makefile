@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -fsanitize=address
 INCLUDES = -I./42-libft
 LIBS = -lreadline -L./42-libft -lft
 SRCS = main.c init.c lexer.c input.c parser.c valid_syntax.c executable.c \

@@ -6,7 +6,7 @@
 /*   By: ruida-si <ruida-si@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 16:21:07 by ruida-si          #+#    #+#             */
-/*   Updated: 2025/02/08 19:55:00 by ruida-si         ###   ########.fr       */
+/*   Updated: 2025/02/10 15:37:01 by ruida-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	exec_cd_4(t_token *token, t_mini *mini)
 		printf("Not found OLDPWD");
 		return ;
 	}
-	pwd = get_old_pwd(mini->envp);
+	pwd = get_var_content("OLDPWD", 7, mini->envp);
 	if (!pwd)
 	{
 		printf("Not found oldpwd\n");

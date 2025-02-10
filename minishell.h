@@ -67,7 +67,7 @@ char	*get_new_cwd(char *buffer);
 int		ft_strcmp(char *s1, char *s2);
 void	free_pwd(char *oldpwd, char *pwd);
 void	update_var(char *oldpwd, char *pwd, t_mini *mini);
-char	*get_old_pwd(t_env *ev);
+char	*get_var_content(char *var, int i, t_env *ev);
 /////
 
 t_mini init(char **envp);
@@ -86,7 +86,7 @@ void    exec_builtin(t_token *token, t_mini *ms);
 void    exec_redirect(t_token *token);
 void    exec_heredoc(t_token *token);
 
-void     exec_echo(t_token *token);
+void     exec_echo(t_token *token, t_mini *mini);
 void     exec_cd(t_token *token, t_mini *mini);
 void     exec_pwd(t_token *token);
 void     exec_export(t_token *token);
