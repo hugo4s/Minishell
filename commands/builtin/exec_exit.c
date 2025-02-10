@@ -1,6 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_exit.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ruida-si <ruida-si@student.42porto.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/06 14:47:38 by ruida-si          #+#    #+#             */
+/*   Updated: 2025/02/06 14:47:39 by ruida-si         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./../../minishell.h"
 
 void exec_exit(t_token *token)
 {
-    printf("Executando EXIT com: %s\n", token->cmd);
+	(void)token;
+	printf("exit\n");
+	exit(1);
 }

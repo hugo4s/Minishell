@@ -12,11 +12,21 @@ typedef struct s_token
 	int quoted_type;
 }	t_token;
 
+// RUI
+typedef struct s_env
+{
+	char			*var;
+	char			*content;
+	struct s_env	*next;
+	struct s_env	*prev;
+}	t_env;
+///
+
 typedef struct s_mini
 {
 	char	*input;
 	char	*prompt;
-	char	**envp;
+	t_env	*envp;
 	t_token	*token;
 	int exit_status;
 	int in_quotes;
@@ -43,6 +53,7 @@ typedef enum e_cmd_type {
 # include <readline/readline.h>
 # include <signal.h>
 # include <stdio.h>
+# include <errno.h>
 # include <stdlib.h>
 # include <sys/wait.h>
 #include <string.h>
@@ -50,6 +61,14 @@ typedef enum e_cmd_type {
 # include "./42-libft/libft.h"
 
 #define BUFFER_SIZE 4096
+
+// RUI functions -- CD functions
+char	*get_new_cwd(char *buffer);
+int		ft_strcmp(char *s1, char *s2);
+void	free_pwd(char *oldpwd, char *pwd);
+void	update_var(char *oldpwd, char *pwd, t_mini *mini);
+char	*get_old_pwd(t_env *ev);
+/////
 
 t_mini init(char **envp);
 char *get_input(t_mini *ms, char *prompt);
@@ -68,10 +87,10 @@ void    exec_redirect(t_token *token);
 void    exec_heredoc(t_token *token);
 
 void     exec_echo(t_token *token);
-void     exec_cd(t_token *token);
+void     exec_cd(t_token *token, t_mini *mini);
 void     exec_pwd(t_token *token);
 void     exec_export(t_token *token);
-void     exec_unset(t_token *token);
+void     exec_unset(t_token *token, t_mini *mini);
 void     exec_env(t_token *token, t_mini *mini);
 void     exec_exit(t_token *token);
 

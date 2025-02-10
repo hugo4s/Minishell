@@ -21,10 +21,9 @@ static int is_builtin(const char *cmd)
 void exec_builtin(t_token *token, t_mini *mini)
 {
     if (!is_builtin(token->cmd))
-        return;
-        
+        return;        
     if (strcmp(token->cmd, "cd") == 0)
-        exec_cd(token);
+        exec_cd(token, mini);
     else if (strcmp(token->cmd, "echo") == 0)
         exec_echo(token);
     else if (strcmp(token->cmd, "pwd") == 0)
@@ -32,7 +31,7 @@ void exec_builtin(t_token *token, t_mini *mini)
     else if (strcmp(token->cmd, "export") == 0)
         exec_export(token);
     else if (strcmp(token->cmd, "unset") == 0)
-        exec_unset(token);
+        exec_unset(token, mini);
     else if (strcmp(token->cmd, "env") == 0)
         exec_env(token, mini);
     else if (strcmp(token->cmd, "exit") == 0)
