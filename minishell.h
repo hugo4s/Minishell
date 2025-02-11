@@ -99,5 +99,9 @@ int is_exec_command(const char *cmd);
 void set_command_type(t_token *current);
 extern volatile sig_atomic_t g_signal_received;
 
+void    sigint_handler(int sig);
+void    sigquit_handler(int sig);
+void    setup_signals(void);
+void	free_tokens(t_token *token);
 
 #endif

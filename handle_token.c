@@ -24,7 +24,7 @@ static char *process_quotes(char *str, int is_single_quote, t_mini *ms)
             char exit_str[16];
             sprintf(exit_str, "%d", ms->exit_status);
             int exit_len = strlen(exit_str);
-            int suffix_len = strlen(pos + 2);  // +2 to skip "$?"
+            int suffix_len = strlen(pos + 2);
             
             temp = malloc(prefix_len + exit_len + suffix_len + 1);
             if (!temp)
