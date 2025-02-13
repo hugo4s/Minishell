@@ -10,7 +10,10 @@ void exec_env(t_token *token, t_mini *mini)
 	(void)token;
 	while (ev)
 	{
-	    printf("%s\n", ev->content);
+		if (!ev->content)
+	    	printf("%s\n", ev->var);
+		else		
+			printf("%s\n", ev->content);
 		/* if (ft_strcmp(ev->var, "OLDPWD") == 0)
 		{
 			printf("%s\n", ev->content);

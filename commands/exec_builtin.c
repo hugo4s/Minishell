@@ -29,7 +29,7 @@ void exec_builtin(t_token *token, t_mini *mini)
     else if (strcmp(token->cmd, "pwd") == 0)
         exec_pwd(token);
     else if (strcmp(token->cmd, "export") == 0)
-        exec_export(token);
+        exec_export(token, mini);
     else if (strcmp(token->cmd, "unset") == 0)
         exec_unset(token, mini);
     else if (strcmp(token->cmd, "env") == 0)

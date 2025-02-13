@@ -6,7 +6,7 @@
 /*   By: ruida-si <ruida-si@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 16:21:07 by ruida-si          #+#    #+#             */
-/*   Updated: 2025/02/10 15:37:01 by ruida-si         ###   ########.fr       */
+/*   Updated: 2025/02/12 16:17:28 by ruida-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,7 @@ void	exec_cd(t_token *token, t_mini *mini)
 	else if (ft_strcmp(token->next->cmd, "..") == 0)
 		exec_cd_2(token, mini);
 	else if (ft_strcmp(token->next->cmd, ".") == 0)
-	{
 		return ;
-	}
 	else if (ft_strcmp(token->next->cmd, "-") == 0)
 		exec_cd_4(token, mini);
 	else
@@ -45,7 +43,7 @@ void	exec_cd_4(t_token *token, t_mini *mini)
 		printf("Not found OLDPWD");
 		return ;
 	}
-	pwd = get_var_content("OLDPWD", 7, mini->envp);
+	pwd = expand_var("OLDPWD", mini->envp);
 	if (!pwd)
 	{
 		printf("Not found oldpwd\n");
@@ -56,6 +54,7 @@ void	exec_cd_4(t_token *token, t_mini *mini)
 		printf("cd: %s: %s\n", token->next->cmd, strerror(errno));
 		return ;
 	}
+	printf("%s\n", pwd);
 	update_var(oldpwd, pwd, mini);
 	free_pwd(oldpwd, pwd);
 }

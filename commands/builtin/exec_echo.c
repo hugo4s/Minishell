@@ -1,51 +1,78 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_echo.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ruida-si <ruida-si@student.42porto.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/12 14:12:54 by ruida-si          #+#    #+#             */
+/*   Updated: 2025/02/13 16:24:46 by ruida-si         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./../../minishell.h"
 
-void	expand_var(char *var, t_mini *mini);
+char	*print_echo(char *input, int *i, char *var, t_mini *mini);
+void	echo_others(t_token *token, t_mini *mini);
 
-void exec_echo(t_token *token, t_mini *mini)
+void	exec_echo(t_token *token, t_mini *mini)
 {
-	t_token	*next;
-	int		i;
+	t_token	*next;	
 
 	next = token->next;
 	if (!next)
-		printf("\n");	
-	else if (next->cmd[0] == '$')
-		expand_var(&next->cmd[1], mini);
-	else
-	{
-		if (next->cmd[0] == '\"')
-			next->cmd++;	
-		while (next)
-		{
-			if (next->next)
-				printf("%s ", next->cmd);
-			else
-			{
-				i = ft_strlen(next->cmd);
-				if (next->cmd[--i] == '\"')
-					next->cmd[i] = '\0';
-				printf("%s", next->cmd);
-			}
-			next = next->next;
-		}
 		printf("\n");
-	}
+	else if (ft_strcmp(next->cmd, "~") == 0)
+		printf("%s\n", expand_var("HOME", mini->envp));
+	else
+		echo_others(token, mini);
 }
 
-
-void	expand_var(char *var, t_mini *mini)
+void	echo_others(t_token *token, t_mini *mini)
 {
+	char	*input;
+	char	*var;
 	int		i;
-	char	*content;
 
-	i = ft_strlen(var);
-	content = get_var_content(var, i + 1, mini->envp);
-	if (!content)
-		printf("\n");
-	else
-		printf("%s\n", content);
-	if (content)
-		free(content);
+	i = 0;
+	(void)token;
+	input = mini->input + 5;
+	while (input[i])
+	{
+		if (input[i] == '\"' || input[i] == '\'')
+			i++;
+		else if (input[i] == '$')
+		{
+			var = ft_strdup(&input[++i]);
+			if (!print_echo(input, &i, var, mini) && input[i])
+				i++;			
+		}
+		else
+		{
+			printf("%c", input[i]);
+			i++;
+		}
+	}
+	printf("\n");
 }
 
+char	*print_echo(char *input, int *i, char *var, t_mini *mini)
+{
+	char	*s;
+	int		j;
+	
+	j = 0;
+	while (var[j] && var[j] != ' ')
+		j++;
+	var[j] = '\0';		
+	s = expand_var(var, mini->envp);
+	free(var);
+	if (s)
+	{
+		printf("%s", s);
+		free(s);
+	}	
+	while (input[*i] && input[*i] != ' ')
+		(*i)++;
+	return (s);
+}

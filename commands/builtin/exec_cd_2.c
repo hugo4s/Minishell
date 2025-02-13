@@ -6,7 +6,7 @@
 /*   By: ruida-si <ruida-si@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 17:31:57 by ruida-si          #+#    #+#             */
-/*   Updated: 2025/02/10 15:35:43 by ruida-si         ###   ########.fr       */
+/*   Updated: 2025/02/12 16:00:28 by ruida-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,19 @@ void	update_var(char *oldpwd, char *pwd, t_mini *mini)
 	}
 }
 
-char	*get_var_content(char *var, int i, t_env *ev)
+char	*expand_var(char *var, t_env *ev)
 {
+	int		i;
 	char	*content;
 
+	i = ft_strlen(var) + 1;
 	content = NULL;
 	while (ev)
 	{
 		if (ft_strcmp(ev->var, var) == 0)
 		{
-			content = ft_strdup(ev->content + i);
+			if (ev->content)
+				content = ft_strdup(ev->content + i);
 			break ;
 		}
 		ev = ev->next;
@@ -62,8 +65,7 @@ char	*get_new_cwd(char *buffer)
 	char	*new;
 
 	new = ft_strdup(buffer);
-	i = ft_strlen(new);
-	i--;
+	i = ft_strlen(new) - 1;
 	while (i >= 0)
 	{
 		if (new[i] == '/')
@@ -91,7 +93,5 @@ int	ft_strcmp(char *s1, char *s2)
 	i = 0;
 	while (s1[i] && s2[i] && s1[i] == s2[i])
 		i++;
-	if (!s1[i] && !s2[i])
-		return (0);
-	return (1);
+	return (s1[i] - s2[i]);
 }

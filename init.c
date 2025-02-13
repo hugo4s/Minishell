@@ -2,7 +2,6 @@
 
 t_env	*get_envp(char **envp);
 void	create_node(t_env **head, char *s);
-t_env	*ft_last(t_env *head);
 
 t_mini init(char **envp)
 {
@@ -10,6 +9,7 @@ t_mini init(char **envp)
 
     ms.input = NULL;
     ms.envp = get_envp(envp);
+	ms.export = get_envp(envp);
     ms.token = NULL;
 	ms.prompt = "\001\033[31m\002m\001\033[33m\002i\001\033[32m\002n\001\033[36m\002i\001\033[34m\002s\001\033[35m\002h\001\033[31m\002e\001\033[33m\002l\001\033[32m\002l\001\033[0m\002$ ";
 	ms.exit_status = 0;
