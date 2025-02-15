@@ -14,23 +14,23 @@ void exec_command(t_token *token)
         perror("Erro ao criar processo");
         return;
     }
-    if (pid == 0) // Processo filho (executa o comando)
+    if (pid == 0)
     {
-        signal(SIGINT, SIG_DFL);  // Restaurar comportamento padrão (Ctrl+C mata o processo)
-        signal(SIGQUIT, SIG_DFL); // Restaurar comportamento padrão (Ctrl+\ exibe "Quit")
+        signal(SIGINT, SIG_DFL);
+        signal(SIGQUIT, SIG_DFL);
         
         execvp(token->cmd, token->args_file);
         perror("Erro ao executar comando");
-        exit(127); // Código de erro padrão para comando não encontrado
+        exit(127);
     }
-    else // Processo pai (Minishell)
+    else
     {
-        signal(SIGINT, SIG_IGN); // Ignora Ctrl+C enquanto espera o filho
-        signal(SIGQUIT, SIG_IGN); // Ignora Ctrl+\ enquanto espera o filho
+        signal(SIGINT, SIG_IGN);
+        signal(SIGQUIT, SIG_IGN);
         
         waitpid(pid, &status, 0);
 
-        signal(SIGINT, sigint_handler); // Restaura handler para o Minishell
+        signal(SIGINT, sigint_handler);
         signal(SIGQUIT, SIG_IGN); // Continua ignorando Ctrl+\ no shell
     }
 }

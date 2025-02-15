@@ -52,7 +52,7 @@ static int validate_command_sequence(t_token *tokens) {
     int exec_count = 0;
     
     while (current) {
-        if (current->type == CMD_EXEC || current->type == CMD_BUILDIN)
+        if (current->type == CMD_EXEC || current->type == CMD_BUILDIN || current->type == CMD_EXIT_STATUS)
             exec_count++;
             
         if (current->type == CMD_PIPE) {

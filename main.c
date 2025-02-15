@@ -18,6 +18,7 @@ int main(int argc, char *argv[], char **envp)
             {
 				parser(&ms);
 				exec(&ms);
+				execute_command(&ms, ms.token);
 				free_tokens(ms.token);
             }
         }

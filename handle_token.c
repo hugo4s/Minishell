@@ -86,7 +86,7 @@ static void handle_argument_token(t_token *current, t_token *prev,
     if (strcmp(current->cmd, "$?") == 0) {
         current->type = CMD_EXIT_STATUS;
         char exit_status[16];
-        sprintf(exit_status, "%d", 0);
+        sprintf(exit_status, "%d", ms->exit_status);
         processed_arg = strdup(exit_status);
     }
     else if (current->cmd[0] == '\'') {
@@ -117,6 +117,13 @@ static void handle_argument_token(t_token *current, t_token *prev,
 void process_token(t_token *current, t_token *prev,
     t_token **last_cmd, int *command_seen, t_mini *ms)
 {
+    if (strcmp(current->cmd, "$?") == 0) {
+        printf("%d\n", ms->exit_status);
+        current->type = CMD_EXIT_STATUS;
+        *command_seen = 1;
+        return;
+    }
+
     if (current->cmd[0] == '\\') {
         current->type = CMD_NONE;
         return;
