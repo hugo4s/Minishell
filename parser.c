@@ -45,27 +45,6 @@ void set_command_type(t_token *current)
         current->type = CMD_EXEC;
 }
 
-void add_to_args_file(t_token *token, char *arg)
-{
-    int i;
-    char **new_args;
-    int j;
-
-    i = 0;
-    while (token->args_file && token->args_file[i])
-        i++;
-    new_args = malloc(sizeof(char *) * (i + 2));
-    j = 0;
-    while (j < i)
-    {
-        new_args[j] = token->args_file[j];
-        j++;
-    }
-    new_args[i] = strdup(arg);
-    new_args[i + 1] = NULL;
-    free(token->args_file);
-    token->args_file = new_args;
-}
 
 void parser(t_mini *ms)
 {

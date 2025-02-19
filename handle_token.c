@@ -43,6 +43,133 @@ static char *process_quotes(char *str, int is_single_quote, t_mini *ms)
     return result;
 }
 
+static void free_array(char **array)
+{
+    int i;
+
+    if (!array)
+        return;
+    i = 0;
+    while (array[i])
+    {
+        free(array[i]);
+        i++;
+    }
+    free(array);
+}
+
+static char **env_to_array(t_env *env)
+{
+    int count = 0;
+    t_env *temp = env;
+    char **env_array;
+    
+    // Count environment variables
+    while (temp)
+    {
+        count++;
+        temp = temp->next;
+    }
+    
+    // Allocate array
+    env_array = malloc(sizeof(char *) * (count + 1));
+    if (!env_array)
+        return NULL;
+    
+    // Fill array
+    temp = env;
+    count = 0;
+    while (temp)
+    {
+        size_t len = strlen(temp->var) + strlen(temp->content) + 2;
+        env_array[count] = malloc(len);
+        if (!env_array[count])
+        {
+            free_array(env_array);
+            return NULL;
+        }
+        snprintf(env_array[count], len, "%s=%s", temp->var, temp->content);
+        temp = temp->next;
+        count++;
+    }
+    env_array[count] = NULL;
+    
+    return env_array;
+}
+
+static int execute_subshell(char *command, t_mini *ms)
+{
+    pid_t pid;
+    int status;
+    char **args;
+    char **env_array;
+    
+    args = ft_split(command, ' ');
+    if (!args)
+        return (1);
+    
+    env_array = env_to_array(ms->envp);
+    if (!env_array)
+    {
+        free_array(args);
+        return (1);
+    }
+    
+    pid = fork();
+    if (pid == -1)
+    {
+        free_array(args);
+        free_array(env_array);
+        return (1);
+    }
+    
+    if (pid == 0)
+    {
+        if (execve(args[0], args, env_array) == -1)
+        {
+            fprintf(stderr, "minishell: %s: %s\n", args[0], strerror(errno));
+            free_array(args);
+            free_array(env_array);
+            exit(EXIT_FAILURE);
+        }
+    }
+    else
+    {
+        waitpid(pid, &status, 0);
+        free_array(args);
+        free_array(env_array);
+        
+        if (WIFEXITED(status))
+            ms->exit_status = WEXITSTATUS(status);
+        else if (WIFSIGNALED(status))
+            ms->exit_status = WTERMSIG(status) + 128;
+    }
+    
+    return (0);
+}
+
+void add_to_args_file(t_token *token, char *arg)
+{
+    int i;
+    char **new_args;
+    
+    for (i = 0; token->args_file[i]; i++)
+        ;
+    
+    new_args = malloc(sizeof(char *) * (i + 2));
+    if (!new_args)
+        return;
+    
+    for (i = 0; token->args_file[i]; i++)
+        new_args[i] = token->args_file[i];
+    
+    new_args[i] = strdup(arg);
+    new_args[i + 1] = NULL;
+    
+    free(token->args_file);
+    token->args_file = new_args;
+}
+
 static void handle_command_token(t_token *current, t_token **last_cmd,
     int *command_seen, t_mini *ms)
 {
@@ -61,6 +188,9 @@ static void handle_command_token(t_token *current, t_token **last_cmd,
     else if (strncmp(current->cmd, "./minishell", 11) == 0) {
         current->type = CMD_SUBSHELL;
         current->args_file[0] = strdup(current->cmd);
+        execute_subshell(current->cmd, ms);
+        *command_seen = 1;
+        *last_cmd = current;
     }
     else {
         current->args_file[0] = strdup(current->cmd);
